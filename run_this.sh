@@ -15,6 +15,9 @@ rm -r /simulation/outputs
 mkdir -p /simulation/outputs 
 echo "Setup..." >> /tmp/debug
 
+# Install par dependency
+pip install utm
+
 python /simulation/inputs/utils/gen_gazebo_ros_spawn.py $num_uavs
 python /simulation/inputs/utils/gen_px4_sitl.py $num_uavs
 python /simulation/inputs/utils/gen_mavros.py $num_uavs
@@ -24,7 +27,7 @@ echo "PAR Library" >> /tmp/debug
 P=`pwd`
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src
-git clone https://github.com/pennaerial/pennair2.git
+git clone https://github.com/pennaerial/pennair2.git --depth 1
 cd ~/catkin_ws
 catkin build pennair2
 source ~/catkin_ws/devel/setup.bash
@@ -58,7 +61,7 @@ sleep 3
 for((i=1;i<$num_uavs;i+=1))
 do
     one=1
-    python /simulation/takeoff.py &> /tmp/debug &
+    python /simulation/takeoff.py &> /simulation/outputs/debug.txt &
     sleep 1
 done
 
